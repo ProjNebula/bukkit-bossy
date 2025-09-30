@@ -6,29 +6,30 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Nonnull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Bossy {
     private static List<Plugin> plugins = new ArrayList<>();
 
     private final Plugin plugin;
-    private final Map<Player,BossBar> bossBars;
+    private final Map<Player, BossBar> bossBars;
     private final BukkitRunnable respawnTask;
 
     public Bossy(@Nonnull Plugin plugin) {
@@ -59,6 +60,7 @@ public class Bossy {
     /**
      * Reveal the boss bar to a player. Also creates a boss bar
      * for the player if it didn't exist.
+     *
      * @param player
      */
     public void show(Player player) {
@@ -74,6 +76,7 @@ public class Bossy {
 
     /**
      * Hides the boss bar from a player.
+     *
      * @param player
      */
     public void hide(Player player) {
@@ -85,6 +88,7 @@ public class Bossy {
     /**
      * Sets the text of the boss bar for a player. Also
      * creates the boss bazr if it didn't exist.
+     *
      * @param player
      * @param text
      */
@@ -104,6 +108,7 @@ public class Bossy {
     /**
      * Sets the percent of the boss bar for a player. Also
      * creates the boss bazr if it didn't exist.
+     *
      * @param player
      * @param percent A value in the range [0,1]
      */
@@ -123,6 +128,7 @@ public class Bossy {
     /**
      * Sets the text and percent of the boss bar for a player.
      * Also creates the boss bazr if it didn't exist.
+     *
      * @param player
      * @param text
      * @param percent A value in the range [0,1]
@@ -132,8 +138,7 @@ public class Bossy {
 
         if (bar == null) {
             bar = newBossBar(player, text, percent);
-        }
-        else {
+        } else {
             bar.setText(text);
             bar.setHealth(convertToHealth(percent));
         }
@@ -182,9 +187,9 @@ public class Bossy {
         StructureModifier<Object> teleportPacketModifier = teleportPacket.getModifier();
 
         teleportPacketModifier.write(0, CUSTOM_ID);
-        teleportPacketModifier.write(1,  (bar.getLocation().getBlockX() * 32));
-        teleportPacketModifier.write(2,  (bar.getLocation().getBlockY() * 32));
-        teleportPacketModifier.write(3,  (bar.getLocation().getBlockZ() * 32));
+        teleportPacketModifier.write(1, (bar.getLocation().getBlockX() * 32));
+        teleportPacketModifier.write(2, (bar.getLocation().getBlockY() * 32));
+        teleportPacketModifier.write(3, (bar.getLocation().getBlockZ() * 32));
         teleportPacketModifier.write(4, (byte) (bar.getLocation().getYaw() * 256 / 360));
         teleportPacketModifier.write(5, (byte) (bar.getLocation().getPitch() * 256 / 360));
         teleportPacketModifier.write(6, true);
@@ -222,7 +227,7 @@ public class Bossy {
         bar.setLocation(null);
 
         PacketContainer spawnPacket = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
-        spawnPacket.getIntegerArrays().write(0, new int[] { CUSTOM_ID });
+        spawnPacket.getIntegerArrays().write(0, new int[]{CUSTOM_ID});
 
         try {
             ProtocolLibrary.getProtocolManager().sendServerPacket(bar.getPlayer(), spawnPacket, false);
@@ -234,11 +239,16 @@ public class Bossy {
     @Data
     @AllArgsConstructor
     private class BossBar {
-        @Getter private final Player player;
-        @Getter private String text;
-        @Getter private int health;
-        @Getter private Location location;
-        @Getter private boolean spawned;
+        @Getter
+        private final Player player;
+        @Getter
+        private String text;
+        @Getter
+        private int health;
+        @Getter
+        private Location location;
+        @Getter
+        private boolean spawned;
 
         public BossBar(Player player, String text, int health) {
             this.player = player;
