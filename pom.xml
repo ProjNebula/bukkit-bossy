@@ -36,6 +36,10 @@
       <id>sportpaper</id>
       <url>https://maven.pkg.github.com/Electroid/SportPaper</url>
     </repository>
+    <repository>
+      <id>aikar</id>
+      <url>https://repo.aikar.co/nexus/content/repositories/aikar/</url>
+    </repository>
   </repositories>
 
   <dependencies>
